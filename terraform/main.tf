@@ -26,3 +26,34 @@ data "aws_availability_zones" "az_list" {
 }
 
 
+# subnets
+
+resource "aws_subnet" "pub1_subnet" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = data.aws_availability_zones.az_list.names[0]
+
+  tags   = {
+    Name = "dev_vpc"
+  }
+}
+
+resource "aws_subnet" "pub2_subnet" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = data.aws_availability_zones.az_list.names[1]
+
+  tags   = {
+    Name = "dev_vpc"
+  }
+}
+
+resource "aws_subnet" "pub3_subnet" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = data.aws_availability_zones.az_list.names[2]
+
+  tags   = {
+    Name = "dev_vpc"
+  }
+}
