@@ -31,8 +31,8 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
-# Route tables
-resource "aws_route_table" "vpc_routes" {
+# Public Subnets Route tables
+resource "aws_route_table" "pub_routes" {
   vpc_id = aws_vpc.vpc.id
 
   route {
@@ -41,31 +41,62 @@ resource "aws_route_table" "vpc_routes" {
   }
 
   tags   = {
-    Name = "dev_vpc_rt"
+    Name = "dev_vpc_pub_rt"
+  }
+}
+
+# Private Subnets Route tables
+resource "aws_route_table" "prv_routes" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+
+  tags   = {
+    Name = "dev_vpc_prv_rt"
   }
 }
 
 
-# Associate route table with subnets
+# Associate pub route table with public subnets
 resource "aws_route_table_association" "pub1_subnet_route" {
   subnet_id      = aws_subnet.pub1_subnet.id
-  route_table_id = aws_route_table.vpc_routes.id
+  route_table_id = aws_route_table.pub_routes.id
 }
 
 resource "aws_route_table_association" "pub2_subnet_route" {
   subnet_id      = aws_subnet.pub2_subnet.id
-  route_table_id = aws_route_table.vpc_routes.id
+  route_table_id = aws_route_table.pub_routes.id
 }
 
 resource "aws_route_table_association" "pub3_subnet_route" {
   subnet_id      = aws_subnet.pub3_subnet.id
-  route_table_id = aws_route_table.vpc_routes.id
+  route_table_id = aws_route_table.pub_routes.id
 }
 
+# Associate prv route table with private subnets
+resource "aws_route_table_association" "prv1_subnet_route" {
+  subnet_id      = aws_subnet.prv1_subnet.id
+  route_table_id = aws_route_table.prv_routes.id
+}
+
+resource "aws_route_table_association" "prv2_subnet_route" {
+  subnet_id      = aws_subnet.prv2_subnet.id
+  route_table_id = aws_route_table.prv_routes.id
+}
+
+resource "aws_route_table_association" "prv3_subnet_route" {
+  subnet_id      = aws_subnet.prv3_subnet.id
+  route_table_id = aws_route_table.prv_routes.id
+}
+
+
 # Nat Gateway
-resource "aws_nat_gateway" "example" {
+resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip.id
-  subnet_id     = aws_subnet.pub3_subnet.id
+  subnet_id     = aws_subnet.pub1_subnet.id
 
   tags   = {
     Name = "dev_vpc_nat"
@@ -88,14 +119,14 @@ data "aws_availability_zones" "az_list" {
   state = "available"
 }
 
-# subnets
+# public subnets
 resource "aws_subnet" "pub1_subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = data.aws_availability_zones.az_list.names[0]
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_pub1_subnet"
   }
 }
 
@@ -105,7 +136,7 @@ resource "aws_subnet" "pub2_subnet" {
   availability_zone = data.aws_availability_zones.az_list.names[1]
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_pub2_subnet"
   }
 }
 
@@ -115,17 +146,18 @@ resource "aws_subnet" "pub3_subnet" {
   availability_zone = data.aws_availability_zones.az_list.names[2]
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_pub3_subnet"
   }
 }
 
+# Private subnets
 resource "aws_subnet" "prv1_subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.4.0/24"
   availability_zone = data.aws_availability_zones.az_list.names[0]
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_prv1_subnet"
   }
 }
 
@@ -135,7 +167,7 @@ resource "aws_subnet" "prv2_subnet" {
   availability_zone = data.aws_availability_zones.az_list.names[1]
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_prv2_subnet"
   }
 }
 
@@ -145,6 +177,6 @@ resource "aws_subnet" "prv3_subnet" {
   availability_zone = data.aws_availability_zones.az_list.names[2]
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_prv3_subnet"
   }
 }
