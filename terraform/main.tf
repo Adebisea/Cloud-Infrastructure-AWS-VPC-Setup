@@ -57,6 +57,11 @@ resource "aws_route_table_association" "pub2_subnet_route" {
   route_table_id = aws_route_table.vpc_routes.id
 }
 
+resource "aws_route_table_association" "pub3_subnet_route" {
+  subnet_id      = aws_subnet.pub3_subnet.id
+  route_table_id = aws_route_table.vpc_routes.id
+}
+
 
 # List availability zones in region
 data "aws_availability_zones" "az_list" {
