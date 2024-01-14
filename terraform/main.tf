@@ -26,8 +26,8 @@ resource "aws_vpc" "vpc" {
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
 
-  tags = {
-    Name = "dev_vpc"
+  tags   = {
+    Name = "dev_vpc_igw"
   }
 }
 
@@ -36,12 +36,12 @@ resource "aws_route_table" "vpc_routes" {
   vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block = "10.0.0.0/0"
+    cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
 
   tags   = {
-    Name = "dev_vpc"
+    Name = "dev_vpc_rt"
   }
 }
 
@@ -62,6 +62,26 @@ resource "aws_route_table_association" "pub3_subnet_route" {
   route_table_id = aws_route_table.vpc_routes.id
 }
 
+# Nat Gateway
+resource "aws_nat_gateway" "example" {
+  allocation_id = aws_eip.eip.id
+  subnet_id     = aws_subnet.pub3_subnet.id
+
+  tags   = {
+    Name = "dev_vpc_nat"
+  }
+
+  depends_on = [aws_internet_gateway.gw]
+}
+
+# Elastic IP 
+resource "aws_eip" "eip" {
+  domain   = "vpc"
+
+    tags   = {
+    Name   = "dev_vpc_eip"
+  }
+}
 
 # List availability zones in region
 data "aws_availability_zones" "az_list" {
