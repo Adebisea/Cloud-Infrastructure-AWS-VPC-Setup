@@ -1,4 +1,4 @@
-# Project Name
+# Cloud-Infrastructure-VPC-Setup
 
 ## Description
 This project uses Terraform to manage infrastructure on AWS. Follow the instructions below to set up your environment.
