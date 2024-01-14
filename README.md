@@ -16,8 +16,8 @@ This project uses Terraform to deploy VPC infrastructure containing 6 subnets (3
 [default]
 AWS_ACCESS_KEY_ID="your_aws_access_key"
 AWS_SECRET_ACCESS_KEY="your_aws_secret_key"
-Replace "your_aws_access_key" and "your_aws_secret_key" with your actual AWS credentials.
 ```
+Replace "your_aws_access_key" and "your_aws_secret_key" with your actual AWS credentials.
 
 ### Initializing Terraform
 Run the following command in the terminal to initialize Terraform:
