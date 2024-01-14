@@ -1,0 +1,3 @@
+terraform/config.txt
+terraform/.*
+terraform/terraform.*
