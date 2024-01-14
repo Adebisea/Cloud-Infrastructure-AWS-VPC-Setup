@@ -21,11 +21,17 @@ Replace "your_aws_access_key" and "your_aws_secret_key" with your actual AWS cre
 
 ### Initializing Terraform
 Run the following command in the terminal to initialize Terraform:
-`terraform init`
+```
+terraform init
+```
 This command initializes your working directory, downloading the necessary providers and modules.
 
 ### Usage
 To deploy the VPC infrastructure, navigate to the Terraform directory and run:
-`terraform apply --auto-approve`
+```
+terraform apply --auto-approve
+```
 To clean up and destroy the infrastructure, run:
-`terraform destroy --auto-approve`
+```
+terraform destroy --auto-approve
+```
