@@ -31,6 +31,33 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
+# Route tables
+resource "aws_route_table" "vpc_routes" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = "10.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+
+  tags   = {
+    Name = "dev_vpc"
+  }
+}
+
+
+# Associate route table with subnets
+resource "aws_route_table_association" "pub1_subnet_route" {
+  subnet_id      = aws_subnet.pub1_subnet.id
+  route_table_id = aws_route_table.vpc_routes.id
+}
+
+resource "aws_route_table_association" "pub2_subnet_route" {
+  subnet_id      = aws_subnet.pub2_subnet.id
+  route_table_id = aws_route_table.vpc_routes.id
+}
+
+
 # List availability zones in region
 data "aws_availability_zones" "az_list" {
   state = "available"
