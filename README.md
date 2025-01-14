@@ -1,7 +1,10 @@
 # Cloud Infrastructure: AWS VPC Setup
 
 ## Description
-This project uses Terraform to deploy VPC infrastructure containing 6 subnets (3 private and 3 public). The private subnet is linked to a NAT Gateway for internet access.
+This project deploys VPC infrastructure containing 6 subnets (3 private and 3 public) using Terraform to enable scalability and fault tolerance across Availability Zones.
+The public subnets are configured with a public route table that included a route to an Internet Gateway (IGW), ensuring direct internet access for public-facing resources. 
+Private subnets are linked to a private route table that routes outbound traffic through a NAT Gateway, maintaining secure internet access for private resources.
+
 
 ## Getting Started
 
